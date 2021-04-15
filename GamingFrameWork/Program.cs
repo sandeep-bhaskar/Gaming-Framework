@@ -6,11 +6,13 @@ namespace GamingFramework
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("-------------------Welcome to Gaming Framework by Vineela.-------------------\n");
-
-            Console.WriteLine("Game Options (Press any key at any time)  \n  'N'  to start a new game \n 'S' to save the game \n 'R' to resume the game \n 'H' for help\n  'E' to Exit \n");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("-------------------Welcome to Gaming Framework by Sandeep.-------------------\n");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("Game Options (Press any key at any time)  \n'N'  to start a new game \n'S' to save the game \n'R' to resume the game \n'H' for help\n'E' to Exit \n");
 
             var game = new GameFramework();
+            Console.ForegroundColor = ConsoleColor.White;
             game.DisplayUserMenu();
 
             Console.WriteLine("\nGoodbye and thanks for playing!");
@@ -38,16 +40,22 @@ namespace GamingFramework
                     switch (userSelection)
                     {
                         case "S":
+                        case "s":
                         case "R":
+                        case "r":
                             if (game == null)
                             {
-                                Console.WriteLine("Game is not yet started");
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+                                Console.WriteLine("Game is not yet started \n");
+                                Console.ForegroundColor = ConsoleColor.White;
                             }
                             break;
                         case "E":
+                        case "e":
                             Environment.Exit(-1);
                             return;
                         case "H":
+                        case "h":
                             Helpers.OpenBrowser(Helpers.HelpGamingURL);
                             break;
                         case "1":
@@ -56,7 +64,9 @@ namespace GamingFramework
                             var isComputerPlaying = false;
                             while (!isDimensionsValid)
                             {
-                                Console.WriteLine("Please enter the board dimensions  (number of rows, number of columns).");
+                                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                Console.WriteLine("Please enter the board dimensions  (number of rows space number of columns).");
+                                Console.ForegroundColor = ConsoleColor.White;
                                 var userInputDimensions = Console.ReadLine();
                                 var inputArray = userInputDimensions.Split(' ');
 
@@ -75,18 +85,28 @@ namespace GamingFramework
                                         }
                                         else
                                         {
+                                            Console.ForegroundColor = ConsoleColor.DarkRed;
                                             Console.WriteLine("Please enter valid mode..\n");
+                                            Console.ForegroundColor = ConsoleColor.White;
                                         }
                                     }
                                 }
                                 else
                                 {
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
                                     Console.WriteLine("Please enter valid dimensions..\n");
+                                    Console.ForegroundColor = ConsoleColor.White;
                                 }
                             }
                             game = Game.CreateConsoleGame(DifficultyLevel.Hard, ActivePlayer.Yellow, false, isComputerPlaying, rows, columns);
                             game.Play();
                             break;
+                        default:
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.WriteLine("Invalid input..\n");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            break;
+
                     }
                 }
             }

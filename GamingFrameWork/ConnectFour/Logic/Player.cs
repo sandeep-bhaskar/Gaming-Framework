@@ -74,7 +74,7 @@ namespace GamingFramework.ConnectFour
                     var input = (string)iODevice.Request("Player {0}'s turn: ", playerColor);
                     iODevice.Output("");
                     var option = validateMove(input, board);                   
-                    if (option != 0)
+                    if (option != -1)
                     {
                         if (option < 0 || option >= board.BoardColumns)
                         {

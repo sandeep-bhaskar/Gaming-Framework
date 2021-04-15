@@ -6,7 +6,8 @@ namespace GamingFramework.ConnectFour.Logic
 {
     public class Board
     {
-        public readonly int BoardRows = 6, BoardColumns = 7;
+        public int BoardRows { get; set; }
+        public int BoardColumns { get; set; }
 
         private readonly CellStates[,] cells;
         private readonly int numberOfEmptyCells;
@@ -15,28 +16,28 @@ namespace GamingFramework.ConnectFour.Logic
         {
             if (boardRows > 0 && boardColumns > 0)
             {
-                BoardRows = boardRows;
-                BoardColumns = boardColumns;
+                this.BoardRows = boardRows;
+                this.BoardColumns = boardColumns;
             }
             cells = new CellStates[BoardRows, BoardColumns];
             numberOfEmptyCells = BoardRows * BoardColumns;
         }
 
-        private Board(Board board, int numberOfEmptyCells)
+        private Board(Board board, int numberOfEmptyCells,int rows ,int cols)
         {
             if (board == null)
                 throw new ArgumentNullException("board");
 
-            if (numberOfEmptyCells < 0 || numberOfEmptyCells > BoardRows * BoardColumns)
+            if (numberOfEmptyCells < 0 || numberOfEmptyCells > rows * cols)
                 throw new ArgumentOutOfRangeException("numberOfEmptyCells");
 
-            cells = new CellStates[BoardRows, BoardColumns];
+            cells = new CellStates[rows, cols];
 
             if (board != null)
             {
-                for (int i = 0; i < BoardRows; i++)
+                for (int i = 0; i < rows; i++)
                 {
-                    for (int j = 0; j < BoardColumns; j++)
+                    for (int j = 0; j < cols; j++)
                     {
                         cells[i, j] = board.cells[i, j];
                     }
@@ -44,6 +45,8 @@ namespace GamingFramework.ConnectFour.Logic
             }
 
             this.numberOfEmptyCells = numberOfEmptyCells;
+            this.BoardRows = rows;
+            this.BoardColumns = cols;
         }
 
         public int NumberOfEmptyCells
@@ -59,14 +62,14 @@ namespace GamingFramework.ConnectFour.Logic
             if (row < 0 || row >= BoardRows)
                 throw new ArgumentOutOfRangeException("row");
 
-            if (column < 0 || column >= BoardColumns) throw new ArgumentOutOfRangeException("column");
+            if (column < 0 || column >= this.BoardColumns) throw new ArgumentOutOfRangeException("column");
 
             return cells[row, column];
         }
 
         public bool MakePlay(ActivePlayer player, int column, out Board board)
         {
-            if (column < 0 || column >= BoardColumns) throw new ArgumentOutOfRangeException("column");
+            if (column < 0 || column >= this.BoardColumns) throw new ArgumentOutOfRangeException("column");
 
             if (cells[0, column] != CellStates.Empty)
             {
@@ -74,7 +77,7 @@ namespace GamingFramework.ConnectFour.Logic
                 return false;
             }
 
-            board = new Board(this, numberOfEmptyCells - 1);
+            board = new Board(this, numberOfEmptyCells - 1,this.BoardRows,this.BoardColumns);
 
             int i;
 
@@ -93,7 +96,7 @@ namespace GamingFramework.ConnectFour.Logic
             var builder = new StringBuilder();
             var header = string.Empty;
             var divisor = string.Empty;
-            for (int i = 0; i < BoardColumns; i++)
+            for (int i = 0; i < this.BoardColumns; i++)
             {
                header = $"{header}   {i}";
                 divisor = $"{divisor}----";
@@ -105,7 +108,17 @@ namespace GamingFramework.ConnectFour.Logic
             {
                 for (int j = 0; j < cells.GetLength(1); j++)
                 {
-                    var str = cells[i, j] == CellStates.Empty ? "| · " : (cells[i, j] == CellStates.Red ? "| X " : "| O ");
+                    var str = string.Empty;
+                    if (cells[i, j] == CellStates.Empty) 
+                    {
+                        str = "| · ";
+                    } else if (cells[i, j] == CellStates.Red)
+                    {
+                        str = "| X ";
+                    } else {
+                        str = "| O ";
+                    }
+
                     builder.Append(str);
                 }
 
